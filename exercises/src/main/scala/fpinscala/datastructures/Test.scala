@@ -29,4 +29,10 @@ object Test extends App {
 
   println(reverse(List(1,2,3,4,5,6,7)))
   println(reverse2(List(1,2,3,4,5,6,7)))
+
+  //foldLeft: ((((((0 - 1) - 2) - 3) - 4) - 5) - 6) - 7 = -28
+  //foldRight: 1 - (2 - (3 - (4 - (5 - (6 - (7 - 0)))))) = 4
+  println(foldLeftAsFoldRight(List(1,2,3,4,5,6,7), 0)(_ - _))
+  println(foldRightAsFoldLeft(List(1,2,3,4,5,6,7), 0)(_ - _))
+
 }
