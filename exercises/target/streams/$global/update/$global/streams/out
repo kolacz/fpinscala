@@ -225,7 +225,7 @@
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang#scala-compiler;2.13.0!scala-compiler.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang#scala-reflect;2.13.0!scala-reflect.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] jline#jline;2.14.6!jline.jar[0m
-[0m[[0mdebug[0m] [0m:: resolution report :: resolve 200ms :: artifacts dl 5ms[0m
+[0m[[0mdebug[0m] [0m:: resolution report :: resolve 30ms :: artifacts dl 1ms[0m
 [0m[[0mdebug[0m] [0m	report for exercises#exercises_2.13;0.1-SNAPSHOT compile produced in /Users/kolacza/Personal/fpinscala/exercises/target/resolution-cache/reports/exercises-exercises_2.13-compile.xml[0m
 [0m[[0mdebug[0m] [0m	report for exercises#exercises_2.13;0.1-SNAPSHOT runtime produced in /Users/kolacza/Personal/fpinscala/exercises/target/resolution-cache/reports/exercises-exercises_2.13-runtime.xml[0m
 [0m[[0mdebug[0m] [0m	report for exercises#exercises_2.13;0.1-SNAPSHOT test produced in /Users/kolacza/Personal/fpinscala/exercises/target/resolution-cache/reports/exercises-exercises_2.13-test.xml[0m
@@ -239,5 +239,5 @@
 [0m[[0mdebug[0m] [0m	report for exercises#exercises_2.13;0.1-SNAPSHOT docs produced in /Users/kolacza/Personal/fpinscala/exercises/target/resolution-cache/reports/exercises-exercises_2.13-docs.xml[0m
 [0m[[0mdebug[0m] [0m	report for exercises#exercises_2.13;0.1-SNAPSHOT pom produced in /Users/kolacza/Personal/fpinscala/exercises/target/resolution-cache/reports/exercises-exercises_2.13-pom.xml[0m
 [0m[[0mdebug[0m] [0m	report for exercises#exercises_2.13;0.1-SNAPSHOT scala-tool produced in /Users/kolacza/Personal/fpinscala/exercises/target/resolution-cache/reports/exercises-exercises_2.13-scala-tool.xml[0m
-[0m[[0mdebug[0m] [0m	resolve done (200ms resolve - 5ms download)[0m
+[0m[[0mdebug[0m] [0m	resolve done (30ms resolve - 1ms download)[0m
 [0m[[0minfo[0m] [0mDone updating.[0m

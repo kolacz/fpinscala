@@ -49,20 +49,67 @@ object List { // `List` companion object. Contains functions for creating and wo
   def product2(ns: List[Double]) =
     foldRight(ns, 1.0)(_ * _) // `_ * _` is more concise notation for `(x,y) => x * y`; see sidebar
 
+  def tail[A](l: List[A]): List[A] = l match {
+    case Nil => Nil
+    case Cons(_, t) => t
+  }
 
-  def tail[A](l: List[A]): List[A] = ???
+  def setHead[A](l: List[A], h: A): List[A] = l match {
+    case Nil => Cons(h, Nil)
+    case Cons(_, t) => Cons(h, t)
+  }
 
-  def setHead[A](l: List[A], h: A): List[A] = ???
+  def drop[A](l: List[A], n: Int): List[A] = l match {
+    case Cons(_, t) if n > 0 => drop(t, n - 1) 
+    case _ => l
+  }
 
-  def drop[A](l: List[A], n: Int): List[A] = ???
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
+    case Cons(h, t) if f(h) => dropWhile(t, f)
+    case _ => l
+  }
 
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = ???
+  def dropWhileCurried[A](l: List[A])(f: A => Boolean): List[A] = l match {
+    case Cons(h, t) if f(h) => dropWhile(t, f)
+    case _ => l
+  }
 
-  def init[A](l: List[A]): List[A] = ???
+  def init[A](l: List[A]): List[A] = l match {
+    case Nil => Nil
+    case Cons(h, t) => if (t == Nil) t else Cons(h, init(t))
+  }
 
-  def length[A](l: List[A]): Int = ???
+  def length[A](l: List[A]): Int = foldRight(l, 0)((_, y) => 1 + y)
 
-  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = ???
+  @annotation.tailrec
+  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B =
+    l match {
+      case Nil => z
+      case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
+    }
+
+  def length2[A](l: List[A]): Int = foldLeft(l, 0)((x, _) => 1 + x)
+
+  def sum3(l: List[Int]): Int = foldLeft(l, 0)(_ + _)
+
+  def product3(l: List[Double]): Double = foldLeft(l, 1.0)(_ * _)
+
+  def reverse[A](l: List[A]): List[A] = {
+    @annotation.tailrec
+    def loop(k: List[A], acc: List[A]): List[A] =
+      k match {
+        case Nil => acc
+        case Cons(x, xs) => loop(xs, Cons(x, acc))
+      }
+
+    loop(l, Nil)
+  }
+
+  def reverse2[A](l: List[A]): List[A] = foldLeft(l, Nil: List[A])((acc, x) => Cons(x, acc))
+
+  def foldLeftAsFoldRight[A](l: List[A], z: B)(f: (B, A) => B): B =
+    foldRight(l, 
 
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
+
 }
