@@ -6,7 +6,7 @@ object Test extends App {
 
   println(dropWhile(List(1,2,3,4,5,6,7), (x: Int) => x < 5))
   println(dropWhileCurried(List(1,2,3,4,5,6,7))(x => x < 5))
-  println(length(List(1,2,3,4,5,6,7,8,9,10,11)))
+  println(lengthR(List(1,2,3,4,5,6,7,8,9,10,11)))
 
   def listOfLength(n: Int) = {
     @annotation.tailrec
@@ -17,22 +17,23 @@ object Test extends App {
     go(n, Nil)
   }
 
-  // foldRight implementation
-  println(length(listOfLength(1000))) 
+  println(lengthR(listOfLength(1000))) 
 
-  // foldLeft implementation 
-  println(length2(listOfLength(1000000)))
+  println(lengthL(listOfLength(1000000)))
 
-
-  println(s"foldLeft sum: ${sum3(List(1,2,3,4,5,6,7,8,9,10))}")
-  println(s"foldLeft product: ${product3(List(1,2,3,4,5,6,7,8,9,10))}")
+  println(s"foldLeft sum: ${sumL(List(1,2,3,4,5,6,7,8,9,10))}")
+  println(s"foldLeft product: ${productL(List(1,2,3,4,5,6,7,8,9,10))}")
 
   println(reverse(List(1,2,3,4,5,6,7)))
-  println(reverse2(List(1,2,3,4,5,6,7)))
+  println(reverseL(List(1,2,3,4,5,6,7)))
 
   //foldLeft: ((((((0 - 1) - 2) - 3) - 4) - 5) - 6) - 7 = -28
   //foldRight: 1 - (2 - (3 - (4 - (5 - (6 - (7 - 0)))))) = 4
-  println(foldLeftAsFoldRight(List(1,2,3,4,5,6,7), 0)(_ - _))
-  println(foldRightAsFoldLeft(List(1,2,3,4,5,6,7), 0)(_ - _))
+  println(foldLeftR(List(1,2,3,4,5,6,7), 0)(_ - _))
+  println(foldRightL(List(1,2,3,4,5,6,7), 0)(_ - _))
 
+  println(appendR(List(1,2,3,4,5,6), List(7,8,9,10)))
+  println(appendL(List(1,2,3), List(4,5,6,7,8,9,10)))
+
+  println(flatten(List(List('a','b','c'), List('d','e','f','g'), List('h', 'i'), Nil, List('j'))))
 }

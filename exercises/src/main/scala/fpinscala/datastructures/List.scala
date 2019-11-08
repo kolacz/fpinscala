@@ -37,18 +37,6 @@ object List { // `List` companion object. Contains functions for creating and wo
       case Cons(h,t) => Cons(h, append(t, a2))
     }
 
-  def foldRight[A,B](as: List[A], z: B)(f: (A, B) => B): B = // Utility functions
-    as match {
-      case Nil => z
-      case Cons(x, xs) => f(x, foldRight(xs, z)(f))
-    }
-
-  def sum2(ns: List[Int]) =
-    foldRight(ns, 0)((x,y) => x + y)
-
-  def product2(ns: List[Double]) =
-    foldRight(ns, 1.0)(_ * _) // `_ * _` is more concise notation for `(x,y) => x * y`; see sidebar
-
   def tail[A](l: List[A]): List[A] = l match {
     case Nil => Nil
     case Cons(_, t) => t
@@ -79,20 +67,32 @@ object List { // `List` companion object. Contains functions for creating and wo
     case Cons(h, t) => if (t == Nil) t else Cons(h, init(t))
   }
 
-  def length[A](l: List[A]): Int = foldRight(l, 0)((_, y) => 1 + y)
+  def foldRight[A,B](as: List[A], z: B)(f: (A, B) => B): B =
+    as match {
+      case Nil => z
+      case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+    }
 
   @annotation.tailrec
-  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B =
-    l match {
+  def foldLeft[A,B](as: List[A], z: B)(f: (B, A) => B): B =
+    as match {
       case Nil => z
       case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
     }
 
-  def length2[A](l: List[A]): Int = foldLeft(l, 0)((x, _) => 1 + x)
+  def sumR(ns: List[Int]) =
+    foldRight(ns, 0)((x,y) => x + y)
 
-  def sum3(l: List[Int]): Int = foldLeft(l, 0)(_ + _)
+  def productR(ns: List[Double]) =
+    foldRight(ns, 1.0)(_ * _) // `_ * _` is more concise notation for `(x,y) => x * y`; see sidebar
 
-  def product3(l: List[Double]): Double = foldLeft(l, 1.0)(_ * _)
+  def lengthR[A](l: List[A]): Int = foldRight(l, 0)((_, y) => 1 + y)
+
+  def lengthL[A](l: List[A]): Int = foldLeft(l, 0)((x, _) => 1 + x)
+
+  def sumL(l: List[Int]): Int = foldLeft(l, 0)(_ + _)
+
+  def productL(l: List[Double]): Double = foldLeft(l, 1.0)(_ * _)
 
   def reverse[A](l: List[A]): List[A] = {
     @annotation.tailrec
@@ -105,14 +105,24 @@ object List { // `List` companion object. Contains functions for creating and wo
     loop(l, Nil)
   }
 
-  def reverse2[A](l: List[A]): List[A] = foldLeft(l, Nil: List[A])((acc, x) => Cons(x, acc))
+  def reverseL[A](l: List[A]): List[A] = foldLeft(l, Nil: List[A])((acc, x) => Cons(x, acc))
 
-  def foldLeftAsFoldRight[A,B](l: List[A], z: B)(f: (B, A) => B): B =
+  def foldLeftR[A,B](l: List[A], z: B)(f: (B, A) => B): B =
     foldRight(l, z)((a, b) => f(b, a))
 
-  def foldRightAsFoldLeft[A,B](l: List[A], z: B)(f: (A, B) => B): B =
+  def foldRightL[A,B](l: List[A], z: B)(f: (A, B) => B): B =
     foldLeft(l, z)((b, a) => f(a, b))
+
+  def appendR[A](a1: List[A], a2: List[A]): List[A] =
+    foldRight(a1, a2)(Cons(_,_))
+
+  def appendL[A](a1: List[A], a2: List[A]): List[A] =
+    foldLeft(reverse(a1), a2)((acc, x) => Cons(x, acc))
+
+  def flatten[A](as: List[List[A]]): List[A] =
+    foldRight(as, Nil: List[A])(appendR(_,_))
 
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 
 }
+
