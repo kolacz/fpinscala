@@ -122,7 +122,56 @@ object List { // `List` companion object. Contains functions for creating and wo
   def flatten[A](as: List[List[A]]): List[A] =
     foldRight(as, Nil: List[A])(appendR(_,_))
 
-  def map[A,B](l: List[A])(f: A => B): List[B] = ???
+  def add1(as: List[Int]): List[Int] = as match {
+    case Nil => Nil
+    case Cons(x, xs) => Cons(x + 1, add1(xs))
+  }
+
+  def doubleToStr(as: List[Double]): List[String] = as match {
+    case Nil => Nil
+    case Cons(d, ds) => Cons(d.toString, doubleToStr(ds))
+  }
+
+  def map[A,B](l: List[A])(f: A => B): List[B] = l match {
+    case Nil => Nil
+    case Cons(x, xs) => Cons(f(x), map(xs)(f))
+  }
+
+  def filter[A](as: List[A])(f: A => Boolean): List[A] = as match {
+    case Nil => Nil
+    case Cons(x, xs) => if (f(x)) Cons(x, filter(xs)(f)) else filter(xs)(f)
+  }
+
+  def flatMap[A,B](as: List[A])(f: A => List[B]): List[B] = as match {
+    case Nil => Nil
+    case Cons(x, xs) => appendR(f(x), flatMap(xs)(f))
+  }
+
+  def filterFM[A](as: List[A])(f: A => Boolean): List[A] =
+    flatMap(as)(x => if (f(x)) List(x) else Nil)
+
+  def addTwoLists(a1: List[Int], a2: List[Int]): List[Int] = (a1, a2) match {
+    case (Cons(x, xs), Cons(y, ys)) => Cons(x + y, addTwoLists(xs, ys))
+    case _ => Nil
+  }
+
+  def zipWith[A,B](a1: List[A], a2: List[A])(f: (A, A) => B): List[B] = (a1, a2) match {
+    case (Cons(x, xs), Cons(y, ys)) => Cons(f(x, y), zipWith(xs, ys)(f))
+    case _ => Nil
+  }
+
+  // x :: xs (ends with colon so it's right-associative) => xs.::(x) => ::(x, xs)
+
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
+
+    def aux[A](a1: List[A], a2: List[A]): Boolean =
+      (a1, a2) match {
+        case (Cons(x, xs), Cons(y, ys)) => if (x == y) aux(xs, ys) else aux(xs, sub)
+        case (_, Nil) => true
+        case _ => false
+      }
+
+    aux(sup, sub)
+  }
 
 }
-
