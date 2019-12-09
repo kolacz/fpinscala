@@ -15,13 +15,24 @@ sealed trait Option[+A] {
   }
 
   def flatMap[B](f: A => Option[B]): Option[B] =
-    if (this != None) f(this.asInstanceOf[Some[A]].get) else None
+    map(f).getOrElse(None)
+
+  // def flatMap2[B](f: A => Option[B]): Option[B] =
+  //   if (this != None) f(this.asInstanceOf[Some[A]].get) else None
 
   def orElse[B>:A](ob: => Option[B]): Option[B] =
-    if (this != None) this else ob
+    this map (Some(_)) getOrElse ob
 
-  def filter(f: A => Boolean): Option[A] =
-    if (this != None && f(this.asInstanceOf[Some[A]].get)) this else None
+  // def orElse2[B>:A](ob: => Option[B]): Option[B] =
+  //   if (this != None) this else ob
+
+  def filter(f: A => Boolean): Option[A] = this match {
+    case Some(a) if f(a) => this
+    case _ => None
+  }
+
+  // def filter2(f: A => Boolean): Option[A] =
+  //   if (this != None && f(this.asInstanceOf[Some[A]].get)) this else None
 
 }
 case class Some[+A](get: A) extends Option[A]
@@ -52,9 +63,28 @@ object Option {
   def variance(xs: Seq[Double]): Option[Double] =
     mean(xs).flatMap(m => mean(xs.map(x => math.pow(x - m, 2))))
 
-  def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = ???
+  def lift[A,B](f: A => B): Option[A] => Option[B] = _ map f
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = ???
+  def Try[A](a: => A): Option[A] =
+    try Some(a)
+    catch { case e: Exception => None }
+
+  def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
+    a flatMap (aa => b map (bb => f(aa, bb)))
+
+  // def map22[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
+  //   if (a == None || b == None) None
+  //   else Some(f(a.asInstanceOf[Some[A]].get, b.asInstanceOf[Some[B]].get))
+
+  def sequence[A](a: List[Option[A]]): Option[List[A]] =
+    (a foldRight (Some(Nil).asInstanceOf[Option[List[A]]]))((x, acc) => map2(x, acc)(_ :: _))
+
+  def sequence2[A](a: List[Option[A]]): Option[List[A]] = a match {
+    case Nil => Some(Nil)
+    case h :: t => h flatMap (hh => sequence2(t) map (hh :: _))
+  }
+
 
   def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = ???
 }
+
