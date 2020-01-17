@@ -77,14 +77,21 @@ object Option {
   //   else Some(f(a.asInstanceOf[Some[A]].get, b.asInstanceOf[Some[B]].get))
 
   def sequence[A](a: List[Option[A]]): Option[List[A]] =
-    (a foldRight (Some(Nil).asInstanceOf[Option[List[A]]]))((x, acc) => map2(x, acc)(_ :: _))
+    (a foldRight Some(Nil).asInstanceOf[Option[List[A]]]) ((x, acc) => map2(x, acc)(_ :: _))
 
   def sequence2[A](a: List[Option[A]]): Option[List[A]] = a match {
     case Nil => Some(Nil)
     case h :: t => h flatMap (hh => sequence2(t) map (hh :: _))
   }
 
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = a match {
+    case Nil => Some(Nil)
+    case h :: t => f(h) flatMap (hh => traverse(t)(f) map (hh :: _)) // map2(f(h), traverse(t)(f))(_ :: _)
+  }
 
-  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = ???
+  def traverse2[A,B](a: List[A])(f: A => Option[B]): Option[List[B]] =
+    a.foldRight[Option[List[B]]](Some(Nil)) ((x, acc) => map2(f(x), acc)(_ :: _))
+
 }
+
 
