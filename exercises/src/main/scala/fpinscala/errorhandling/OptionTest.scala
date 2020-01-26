@@ -19,4 +19,9 @@ object OptionTest extends App {
   println(sequence(List(Some(10), Some(11), Some(12), Some(13))))
   println(sequence(List(Some(10), Some(11), None, Some(13))))
 
+  def parseInts(a: List[String]): Option[List[Int]] =
+    sequence(a map (s => Try(s.toInt)))
+
+  println(parseInts(List("1","2","10321","3")))
+  println(traverse2(List("1","2","10321","12"))(s => Try(s.toInt)))
 }

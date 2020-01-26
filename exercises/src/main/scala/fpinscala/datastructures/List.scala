@@ -164,9 +164,14 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
 
+    val Cons(head, tail) = sub
+
     def aux[A](a1: List[A], a2: List[A]): Boolean =
       (a1, a2) match {
-        case (Cons(x, xs), Cons(y, ys)) => if (x == y) aux(xs, ys) else aux(xs, sub)
+        case (Cons(x, xs), Cons(y, ys)) =>
+          if (x == y) aux(xs, ys)
+          else if (x == head) aux(xs, tail)
+          else aux(xs, sub)
         case (_, Nil) => true
         case _ => false
       }
